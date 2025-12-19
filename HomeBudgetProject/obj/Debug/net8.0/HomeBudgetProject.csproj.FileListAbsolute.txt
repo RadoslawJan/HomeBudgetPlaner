@@ -1,0 +1,14 @@
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\bin\Debug\net8.0\HomeBudgetProject.exe
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\bin\Debug\net8.0\HomeBudgetProject.deps.json
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\bin\Debug\net8.0\HomeBudgetProject.runtimeconfig.json
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\bin\Debug\net8.0\HomeBudgetProject.dll
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\bin\Debug\net8.0\HomeBudgetProject.pdb
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.AssemblyInfoInputs.cache
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.AssemblyInfo.cs
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.csproj.CoreCompileInputs.cache
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.dll
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\refint\HomeBudgetProject.dll
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.pdb
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\HomeBudgetProject.genruntimeconfig.cache
+C:\Users\Radek\Desktop\Projekt po\projektZTP\HomeBudgetProject\HomeBudgetProject\obj\Debug\net8.0\ref\HomeBudgetProject.dll
