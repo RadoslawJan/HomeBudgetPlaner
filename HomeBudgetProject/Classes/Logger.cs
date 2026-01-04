@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,13 +11,22 @@ namespace HomeBudgetProject.Classes
         private static Logger _instance;
         private List<string> logEntries;
 
+        private Logger() {
+            logEntries = new List<string>();
+        }
+
         public static Logger GetInstance()
         {
+            if (_instance == null)
+            {
+                _instance = new Logger();
+            }
+
             return _instance;
         }
         public void Log(string message)
         {
-            Console.WriteLine($"[LOG]: ");
+            logEntries.Add(message);
         }
 
         public List<string> GetLogsForAdmin()
