@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,12 +29,29 @@ namespace HomeBudgetProject.Classes
         }
         public void AddExpense(Expense item)
         {
-            throw new NotImplementedException();
+            if (user.Status == StatusLevel.Guest)
+            {
+                Console.WriteLine("Brak uprawnień");
+                Logger.GetInstance().Log($"Próba dodania wydatku przez osobę nieupoważnioną.");
+            }
+            else {
+                Logger.GetInstance().Log($"{user.Nickname} [{user.Status}]: ");
+                service.AddExpense(item);
+            }
         }
 
         public void AddIncome(Income item)
         {
-            throw new NotImplementedException();
+            if (user.Status == StatusLevel.Guest)
+            {
+                Console.WriteLine("Brak uprawnień");
+                Logger.GetInstance().Log($"Próba dodania przychodu przez osobę nieupoważnioną.");
+            }
+            else
+            {
+                Logger.GetInstance().Log($"{user.Nickname} [{user.Status}]: ");
+                service.AddIncome(item);
+            }
         }
 
         public void Attach(IBudgetObserver observer)
