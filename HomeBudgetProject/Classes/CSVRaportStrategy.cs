@@ -7,7 +7,7 @@ using HomeBudgetProject.Interfaces;
 
 namespace HomeBudgetProject.Classes
 {
-    internal class CSVRaportStrategy : IRaportStrategy
+    public class CSVRaportStrategy : IRaportStrategy
     {
         public void GenerateRaport(HomeBudgetPlanner planner)
         {

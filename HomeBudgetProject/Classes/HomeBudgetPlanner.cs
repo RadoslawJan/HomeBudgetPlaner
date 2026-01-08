@@ -14,37 +14,49 @@ namespace HomeBudgetProject.Classes
         public IRaportStrategy raportStrategy;
         public void AddExpense(Expense item)
         {
-            throw new NotImplementedException();
+            budgetItemsList.Add(item);
+            Notify();
         }
 
         public void AddIncome(Income item)
         {
-            throw new NotImplementedException();
+            budgetItemsList.Add(item);
+            Notify();
         }
 
         public void Attach(IBudgetObserver observer)
         {
-            throw new NotImplementedException();
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
         }
 
         public void Detach(IBudgetObserver observer)
         {
-            throw new NotImplementedException();
+            observers.Remove(observer);
         }
 
         public void GenerateRaport()
         {
-            throw new NotImplementedException();
+            if (raportStrategy == null)
+            {
+                throw new InvalidOperationException("Nie ustawiono strategii raportowania!");
+            }
+            raportStrategy.GenerateRaport(this);
         }
 
         public void Notify()
         {
-            throw new NotImplementedException();
+            foreach (var observer in observers)
+            {
+                observer.Update(this);
+            }
         }
 
         public void SetStrategy(IRaportStrategy strategy)
         {
-            throw new NotImplementedException();
+            this.raportStrategy = strategy;
         }
     }
 }

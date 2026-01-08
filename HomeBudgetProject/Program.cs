@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Data;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 using HomeBudgetProject.Classes;
 using HomeBudgetProject.Enums;
 
@@ -49,6 +51,24 @@ namespace HomeBudgetProject
             Console.Clear();
 
             HomeBudgetPlannerProxy proxy = new HomeBudgetPlannerProxy(currentUser);
+            HomeBudgetPlanner planner = new HomeBudgetPlanner();
+
+            Console.WriteLine("Wybierz format raportu: 1 - PDF, 2 - CSV");
+            string choice = Console.ReadLine();
+
+            if (choice == "1")
+            {
+                planner.SetStrategy(new PDFRaportStrategy());
+            }
+            else
+            {
+                planner.SetStrategy(new CSVRaportStrategy());
+            }
+
+
+            planner.GenerateRaport();
+            Console.ReadLine();
+            Console.Clear();
 
             display.ShowMenu();
 

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HomeBudgetProject")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26f2973aebe8c74b73f072f0fc9be44a8f637222")]
 [assembly: System.Reflection.AssemblyProductAttribute("HomeBudgetProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HomeBudgetProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
