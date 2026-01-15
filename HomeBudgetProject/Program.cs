@@ -31,7 +31,19 @@ namespace HomeBudgetProject
 
             display.ShowPlan(planner);
 
+User twujStary = new User("twujStary", "haslo123", StatusLevel.NormalUser);
+            HomeBudgetPlanner planerTwojegoStarego = new HomeBudgetPlanner();
+            HomeBudgetPlannerProxy twujStaryProxy = new HomeBudgetPlannerProxy(twujStary, planerTwojegoStarego);
+            twujStaryProxy.AddExpense(new Expense("Kupno nowego laptopa", 2000));
+            twujStaryProxy.AddExpense(new Expense("Kupno nowego telefonu", 1500));
+            twujStaryProxy.AddIncome(new Income("Pensja", 5000));
+            display.ShowPlan(planerTwojegoStarego);
+            
+            planerTwojegoStarego.SetStrategy(new CSVRaportStrategy());
+            planerTwojegoStarego.GenerateRaport();
 
+           planerTwojegoStarego.SetStrategy(new PDFRaportStrategy());
+           planerTwojegoStarego.GenerateRaport();
 
 
 
