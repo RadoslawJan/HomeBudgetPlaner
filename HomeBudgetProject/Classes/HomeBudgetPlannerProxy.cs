@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HomeBudgetProject.Enums;
+﻿using HomeBudgetProject.Enums;
 using HomeBudgetProject.Interfaces;
 
 namespace HomeBudgetProject.Classes
@@ -13,20 +8,32 @@ namespace HomeBudgetProject.Classes
         private HomeBudgetPlanner _realService;
         private User user;
 
+        private Logger logger;
+
         public HomeBudgetPlannerProxy(User user, HomeBudgetPlanner service)
         {
             this.user = user;
             _realService = service;
+            logger = Logger.GetInstance();
         }
 
         public void AddExpense(Expense item)
         {
             _realService.AddExpense(item);
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nowy wydatek");
+
         }
 
         public void AddIncome(Income item)
         {
             _realService.AddIncome(item);
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nowy przychód");
+        }
+
+        public void AddGroup(BudgetGroup group)
+        {
+            _realService.AddGroup(group);
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nową grupę");
         }
 
         public void Attach(IBudgetObserver observer)
@@ -43,10 +50,12 @@ namespace HomeBudgetProject.Classes
         {
             if (!HasPermission(nameof(GenerateRaport)))
             {
-                Console.WriteLine("X");
+                Console.WriteLine("Nie masz uprawnień do generowania raportu");
+                logger.Log(LogType.FailedOperation, user, "Nie posiada uprawnień do generowania raportu");
                 return;
             }
             _realService.GenerateRaport();
+            logger.Log(LogType.SuccessfulOperation, user, $"Wygenerowano raport {_realService.raportStrategy}");
        
         }
 
@@ -59,10 +68,12 @@ namespace HomeBudgetProject.Classes
         {
             if (!HasPermission(nameof(SetStrategy)))
             {
-                Console.WriteLine("X");
+                Console.WriteLine("Nie masz uprawnień do zmiany formatu raportu");
+                logger.Log(LogType.FailedOperation, user, "Nie posiada uprawnień do zmiany formatu raportu");
                 return;
             }
             _realService.SetStrategy(strategy);
+            logger.Log(LogType.SuccessfulOperation, user, $"Ustawiono format raportu na {strategy}");
         }
 
         private bool HasPermission(string methodName)

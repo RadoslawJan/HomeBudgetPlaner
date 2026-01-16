@@ -1,7 +1,4 @@
-﻿using System.Data;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using HomeBudgetProject.Classes;
+﻿using HomeBudgetProject.Classes;
 using HomeBudgetProject.Enums;
 
 namespace HomeBudgetProject
@@ -12,6 +9,7 @@ namespace HomeBudgetProject
         {
             Display display = new Display();
             User guest = new User("guest", "guest", StatusLevel.Guest);
+            Logger logger = Logger.GetInstance();
 
             HomeBudgetPlanner planner = new HomeBudgetPlanner();
             HomeBudgetPlannerProxy plannerProxy = new HomeBudgetPlannerProxy(guest, planner);
@@ -27,11 +25,11 @@ namespace HomeBudgetProject
             group2.Add(new Expense("Piwo z chłopakami", 50));
             group2.Add(new Expense("Drugie piwo z chłopakami", 70));
             group.Add(group2);
-            planner.AddGroup(group);
+            plannerProxy.AddGroup(group);
 
             display.ShowPlan(planner);
 
-User twujStary = new User("twujStary", "haslo123", StatusLevel.NormalUser);
+            User twujStary = new User("twujStary", "haslo123", StatusLevel.NormalUser);
             HomeBudgetPlanner planerTwojegoStarego = new HomeBudgetPlanner();
             HomeBudgetPlannerProxy twujStaryProxy = new HomeBudgetPlannerProxy(twujStary, planerTwojegoStarego);
             twujStaryProxy.AddExpense(new Expense("Kupno nowego laptopa", 2000));
@@ -45,9 +43,8 @@ User twujStary = new User("twujStary", "haslo123", StatusLevel.NormalUser);
            planerTwojegoStarego.SetStrategy(new PDFRaportStrategy());
            planerTwojegoStarego.GenerateRaport();
 
+           logger.GetLogsForAdmin();
 
-
-            
         }
     }
 }
