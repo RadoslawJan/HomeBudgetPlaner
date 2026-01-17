@@ -31,12 +31,14 @@ namespace HomeBudgetProject.Classes
 
         public override string ToString()
         {
-            string result = $"{Name}: {Category}\n";
+            string result = $"{Category}: {Name}  -  £¹cznie: {GetValue()} z³\n";
             foreach (BudgetItem item in budgetItemList)
             {
-                result += $"\t{item}\n";
-            }
-            result += $"{Value}";
+                string childstring = item.ToString();
+
+                string indentedChild = "\n\t" + childstring.Replace("\n", "\n\t");
+                result += indentedChild;
+            }     
             return result;
         }
 

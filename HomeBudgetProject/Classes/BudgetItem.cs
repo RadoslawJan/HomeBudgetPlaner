@@ -15,7 +15,7 @@
 
         public override string ToString()
         {
-            return $"Element: {Name} Koszt: {Value}";
+            return $"Nazwa: {Name}  -  Kwota: {Value}\n";
         }
     }
 }
