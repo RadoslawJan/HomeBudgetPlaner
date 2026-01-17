@@ -1,20 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HomeBudgetProject.Enums;
-
 namespace HomeBudgetProject.Classes
 {
     public class BudgetGroup : BudgetItem
     {
         public List<BudgetItem> budgetItemList = new List<BudgetItem>();
+        string Category;
 
-        public BudgetGroup(CategoryType category) {
-            this.Category = category;
-            this.Name = category.ToString();
-            this.Value = 0;
+        public BudgetGroup(string name, string category): base(name, 0)
+        {
+            Category = category;
         }
 
         public void Add(BudgetItem item)
@@ -35,5 +28,20 @@ namespace HomeBudgetProject.Classes
             }
             return total;
         }
+
+        public override string ToString()
+        {
+            string result = $"{Category}: {Name}  -  £¹cznie: {GetValue()} z³\n";
+            foreach (BudgetItem item in budgetItemList)
+            {
+                string childstring = item.ToString();
+
+                string indentedChild = "\n\t" + childstring.Replace("\n", "\n\t");
+                result += indentedChild;
+            }     
+            return result;
+        }
+
+
     }
 }

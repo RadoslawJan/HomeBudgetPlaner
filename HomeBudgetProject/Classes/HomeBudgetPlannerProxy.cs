@@ -1,82 +1,104 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HomeBudgetProject.Enums;
+﻿using HomeBudgetProject.Enums;
 using HomeBudgetProject.Interfaces;
 
 namespace HomeBudgetProject.Classes
 {
     internal class HomeBudgetPlannerProxy : IHomeBudgetPlanner
     {
-        private HomeBudgetPlanner service;
+        private HomeBudgetPlanner _realService;
         private User user;
 
-        public HomeBudgetPlannerProxy(User user)
+        private Logger logger;
+
+        public HomeBudgetPlannerProxy(User user, HomeBudgetPlanner service)
         {
             this.user = user;
-            service = new HomeBudgetPlanner();
+            _realService = service;
+            logger = Logger.GetInstance();
         }
-        private bool HasPermission()
-        {
-            if (user.Status == StatusLevel.Guest)
-            {
-                Console.WriteLine("Brak uprawnień");
-                return false;
-            }
-            return true; // Narazie podstawowe sprawdzenie
-        }
+
         public void AddExpense(Expense item)
         {
-            if (user.Status == StatusLevel.Guest)
-            {
-                Console.WriteLine("Brak uprawnień");
-                Logger.GetInstance().Log($"Próba dodania wydatku przez osobę nieupoważnioną.");
-            }
-            else {
-                Logger.GetInstance().Log($"{user.Nickname} [{user.Status}]: ");
-                service.AddExpense(item);
-            }
+            _realService.AddExpense(item);
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nowy wydatek");
+
         }
 
         public void AddIncome(Income item)
         {
-            if (user.Status == StatusLevel.Guest)
-            {
-                Console.WriteLine("Brak uprawnień");
-                Logger.GetInstance().Log($"Próba dodania przychodu przez osobę nieupoważnioną.");
-            }
-            else
-            {
-                Logger.GetInstance().Log($"{user.Nickname} [{user.Status}]: ");
-                service.AddIncome(item);
-            }
+            _realService.AddIncome(item);
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nowy przychód");
+        }
+
+        public void AddGroup(BudgetGroup group)
+        {
+            _realService.AddGroup(group);
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nową grupę");
         }
 
         public void Attach(IBudgetObserver observer)
         {
-            throw new NotImplementedException();
+            _realService.Attach(observer);
         }
 
         public void Detach(IBudgetObserver observer)
         {
-            throw new NotImplementedException();
+            _realService.Detach(observer);
         }
 
         public void GenerateRaport()
         {
-            throw new NotImplementedException();
+            if (!HasPermission(nameof(GenerateRaport)))
+            {
+                Console.WriteLine("Nie masz uprawnień do generowania raportu");
+                logger.Log(LogType.FailedOperation, user, "Nie posiada uprawnień do generowania raportu");
+                return;
+            }
+            _realService.GenerateRaport();
+            logger.Log(LogType.SuccessfulOperation, user, $"Wygenerowano raport {_realService.raportStrategy}");
+       
         }
 
         public void Notify()
         {
-            throw new NotImplementedException();
+            _realService.Notify();
         }
 
         public void SetStrategy(IRaportStrategy strategy)
         {
-            throw new NotImplementedException();
+            if (!HasPermission(nameof(SetStrategy)))
+            {
+                Console.WriteLine("Nie masz uprawnień do zmiany formatu raportu");
+                logger.Log(LogType.FailedOperation, user, "Nie posiada uprawnień do zmiany formatu raportu");
+                return;
+            }
+            _realService.SetStrategy(strategy);
+            logger.Log(LogType.SuccessfulOperation, user, $"Ustawiono format raportu na {strategy}");
+        }
+
+        private bool HasPermission(string methodName)
+        {
+            switch (methodName)
+            {
+                case "GenerateRaport":
+                    if (user.Status < StatusLevel.NormalUser)
+                    {
+                        return false;
+                    }
+                    break;
+                case "SetStrategy":
+                    if (user.Status < StatusLevel.VIP)
+                    {
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        public HomeBudgetPlanner GetRealService()
+        {
+            return _realService;
         }
     }
 }

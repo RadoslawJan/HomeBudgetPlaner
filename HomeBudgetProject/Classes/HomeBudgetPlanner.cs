@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HomeBudgetProject.Enums;
-using HomeBudgetProject.Interfaces;
+﻿using HomeBudgetProject.Interfaces;
 
 namespace HomeBudgetProject.Classes
 {
@@ -13,72 +7,78 @@ namespace HomeBudgetProject.Classes
         private List<IBudgetObserver> observers = new List<IBudgetObserver>();
         public List<BudgetItem> budgetItemsList = new List<BudgetItem>();
         public IRaportStrategy raportStrategy;
-        private BudgetGroup expensesGroup;
-        private BudgetGroup incomeGroup;
-
-        public HomeBudgetPlanner()
-        {
-            incomeGroup = new BudgetGroup(Enums.CategoryType.Przychody);
-            expensesGroup = new BudgetGroup(Enums.CategoryType.WszystkieWydatki);
-
-            foreach (CategoryType category in Enum.GetValues(typeof(CategoryType)))
-            {
-                if (category == CategoryType.Przychody || category == CategoryType.WszystkieWydatki) continue;
-
-                BudgetGroup group = new BudgetGroup(category);
-                expensesGroup.Add(group);
-            }
-
-            budgetItemsList.Add(incomeGroup);
-            budgetItemsList.Add(expensesGroup);
-        }
         public void AddExpense(Expense item)
         {
-            BudgetGroup pomGroup = null;
-
-            foreach (BudgetGroup element in expensesGroup.budgetItemList)
-            {
-                if (item.Category == element.Category)
-                {
-                    pomGroup = element;
-                    break;
-                }
-            }      
-                pomGroup.Add(item);
-                Logger.GetInstance().Log($"Dodano wydatek: {item.Name}.");
-                Notify();
+            budgetItemsList.Add(item);
+            Notify();
         }
 
         public void AddIncome(Income item)
         {
-            incomeGroup.Add(item);
-            Logger.GetInstance().Log($"Dodano przychód.");
+            budgetItemsList.Add(item);
+            Notify();
+        }
+
+        public void AddGroup(BudgetGroup group)
+        {
+            BudgetGroup exist = null;
+
+            foreach (var item in budgetItemsList)
+            {
+                if (item is BudgetGroup cat && cat.Name == group.Name)
+                {
+                    exist = cat;
+                    break;
+                }
+            }
+
+            if (exist != null)
+            {
+                foreach (var Item in group.budgetItemList)
+                {
+                    exist.Add(Item);
+                }
+            }
+            else
+            {
+                budgetItemsList.Add(group);
+            }
             Notify();
         }
 
         public void Attach(IBudgetObserver observer)
         {
-            throw new NotImplementedException();
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
         }
 
         public void Detach(IBudgetObserver observer)
         {
-            throw new NotImplementedException();
+            observers.Remove(observer);
         }
 
         public void GenerateRaport()
         {
-            throw new NotImplementedException();
+            if (raportStrategy == null)
+            {
+                throw new InvalidOperationException("Nie ustawiono strategii raportowania!");
+            }
+            raportStrategy.GenerateRaport(this);
         }
 
         public void Notify()
         {
-            throw new NotImplementedException();
+            foreach (var observer in observers)
+            {
+                observer.Update(this);
+            }
         }
 
         public void SetStrategy(IRaportStrategy strategy)
         {
-            throw new NotImplementedException();
+            this.raportStrategy = strategy;
         }
     }
 }
