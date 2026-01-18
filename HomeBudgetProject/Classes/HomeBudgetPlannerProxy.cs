@@ -19,9 +19,14 @@ namespace HomeBudgetProject.Classes
 
         public void AddExpense(Expense item)
         {
+            if (user.Status == StatusLevel.Guest)
+            {
+                Console.WriteLine("Błąd: Gość nie ma uprawnień do dodawania wydatków.");
+                logger.Log(LogType.FailedOperation, user, "Próba dodania wydatku przez gościa");
+                return;
+            }
             _realService.AddExpense(item);
-            logger.Log(LogType.SuccessfulOperation, user, $"Dodano nowy wydatek");
-
+            logger.Log(LogType.SuccessfulOperation, user, $"Dodano wydatek: {item.Name}");
         }
 
         public void AddIncome(Income item)

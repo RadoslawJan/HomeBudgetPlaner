@@ -6,7 +6,9 @@ namespace HomeBudgetProject.Classes
     {
         public void Update(HomeBudgetPlanner planer)
         {
-            Console.WriteLine("Wygenerowano autoraport:");
+            Console.WriteLine("System: Wykryto zmiany, aktualizuję raport automatyczny...");
+            var autoStrategy = new CSVRaportStrategy();
+            autoStrategy.GenerateRaport(planer);
         }
     }
 }

@@ -1,3 +1,5 @@
+using HomeBudgetProject.Enums;
+
 namespace HomeBudgetProject.Classes
 {
     internal class Logger
@@ -23,8 +25,14 @@ namespace HomeBudgetProject.Classes
             logEntries.Add(new Log(logType, user, description));
         }
 
-        public void GetLogsForAdmin()
+        public void GetLogsForAdmin(User currentUser)
         {
+            if (currentUser.Status != StatusLevel.Admin)
+            {
+                Console.WriteLine("Brak uprawnieñ do przegl¹dania logów systemowych!");
+                return;
+            }
+
             int number = 1;
             foreach (Log log in logEntries)
             {
