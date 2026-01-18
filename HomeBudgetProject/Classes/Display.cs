@@ -7,6 +7,7 @@ namespace HomeBudgetProject.Classes
     internal class Display : IBudgetObserver
     {
         private IHomeBudgetPlanner _planner;
+        private UserManager _userManager = new UserManager();
         private User _currentUser;
         public void Update(HomeBudgetPlanner planner)
         {
@@ -44,52 +45,60 @@ namespace HomeBudgetProject.Classes
             Console.WriteLine("Naciśnij dowolny przyciska aby przejść dalej");
             Console.ReadKey();
         }
-        
+
 
         public void Login()
         {
             Console.Clear();
-            Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
             Console.WriteLine("[LOGOWANIE]");
             Console.Write("Podaj nazwę: ");
-            string login = "";
-            while (string.IsNullOrWhiteSpace(login))
+            string login = Console.ReadLine() ?? "";
+            Console.Write("Podaj hasło: ");
+            string password = Console.ReadLine() ?? "";
+
+            User? authenticatedUser = _userManager.Authenticate(login, password);
+
+            if (authenticatedUser != null)
             {
-                Console.Write("Podaj nazwę: ");
-                login = Console.ReadLine();
+                AddUser(authenticatedUser.Nickname, authenticatedUser.Password, authenticatedUser.Status);
+                MainMenu();
             }
-            string password = "";
-            while (string.IsNullOrWhiteSpace(password))
+            else
             {
-                Console.Write("Podaj hasło: ");
-                password = Console.ReadLine();
+                Console.WriteLine("Błędny login lub hasło! Naciśnij klawisz...");
+                Console.ReadKey();
             }
-            StatusLevel status = StatusLevel.NormalUser;
-            if (login == "admin") status = StatusLevel.Admin;
-            AddUser(login, password, status);
-            MainMenu();
         }
 
         public void Register()
         {
             Console.Clear();
-            Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
             Console.WriteLine("[REJESTRACJA]");
-            Console.Write("Wybierz nową nazwę: ");
-            string login = "";
-            while (string.IsNullOrWhiteSpace(login))
+            Console.Write("Nowa nazwa: ");
+            string login = Console.ReadLine() ?? "";
+            Console.Write("Nowe hasło: ");
+            string password = Console.ReadLine() ?? "";
+
+            Console.WriteLine("Wybierz poziom (0-Guest, 1-NormalUser, 2-VIP, 3-Admin):");
+            if (Enum.TryParse(Console.ReadLine(), out StatusLevel level))
             {
-                Console.Write("Wybierz nową nazwę: ");
-                login = Console.ReadLine();
+                string? adminKey = null;
+                if (level >= StatusLevel.VIP)
+                {
+                    Console.Write("Podaj hasło administratora, aby nadać te uprawnienia: ");
+                    adminKey = Console.ReadLine();
+                }
+
+                if (_userManager.RegisterUser(login, password, level, adminKey))
+                {
+                    Console.WriteLine("Zarejestrowano pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Nazwa zajęta lub błędne hasło administratora.");
+                }
             }
-            string password = "";
-            while (string.IsNullOrWhiteSpace(password))
-            {
-                Console.Write("Wybierz nowe hasło: ");
-                password = Console.ReadLine();
-            }
-            StatusLevel status = StatusLevel.NormalUser;
-            AddUser(login, password, status);
+            Console.ReadKey();
         }
 
         public void MainMenu()

@@ -4,12 +4,14 @@ namespace HomeBudgetProject.Classes
 {
     public class User
     {
-        public string Nickname;
-        public string Password;
-        public StatusLevel Status;
-        public User(string Nickname, string Password, StatusLevel level) {
-            this.Nickname = Nickname;
-            this.Password = Password;
+        public string Nickname { get; set; }
+        public string Password { get; set; }
+        public StatusLevel Status { get; set; }
+
+        public User(string nickname, string password, StatusLevel level)
+        {
+            Nickname = nickname;
+            Password = password;
             Status = level;
         }
     }
