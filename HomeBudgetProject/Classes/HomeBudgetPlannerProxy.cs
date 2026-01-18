@@ -95,5 +95,10 @@ namespace HomeBudgetProject.Classes
             }
             return true;
         }
+
+        public HomeBudgetPlanner GetRealService()
+        {
+            return _realService;
+        }
     }
 }

@@ -21,7 +21,28 @@ namespace HomeBudgetProject.Classes
 
         public void AddGroup(BudgetGroup group)
         {
-            budgetItemsList.Add(group);
+            BudgetGroup exist = null;
+
+            foreach (var item in budgetItemsList)
+            {
+                if (item is BudgetGroup cat && cat.Name == group.Name)
+                {
+                    exist = cat;
+                    break;
+                }
+            }
+
+            if (exist != null)
+            {
+                foreach (var Item in group.budgetItemList)
+                {
+                    exist.Add(Item);
+                }
+            }
+            else
+            {
+                budgetItemsList.Add(group);
+            }
             Notify();
         }
 
