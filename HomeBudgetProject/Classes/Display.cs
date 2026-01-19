@@ -14,6 +14,8 @@ namespace HomeBudgetProject.Classes
             Console.WriteLine("Dokonano zmian w budżecie");
         }
 
+
+        //początkowy ekran
         public void ShowLoginScreen()
         {
             Console.Clear();
@@ -27,80 +29,184 @@ namespace HomeBudgetProject.Classes
             });
 
         }
-
+        //menu po wejściu w stan budżetu
         public void ShowPlan(HomeBudgetPlanner planner)
         {
+                Console.Clear();
+                Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
+                Console.WriteLine("[STAN BUDŻETU]\n");
+                float totalExpenses = planner.GetTotalExpenses();
+                float totalIncome = planner.GetTotalIncome();
+                float balance = planner.GetBalance();
+
+                Console.WriteLine($"\t\tObecny balans: {balance} zł\n");
+
+                ShowMenu(new List<MenuOption>
+            {
+                new MenuOption($"Pokaż wydatki  (Łącznie: {totalExpenses} zł)", () => ShowExpensesList(planner)),
+                new MenuOption($"Pokaż przychody (Suma: {totalIncome} zł)", () => ShowIncomesList(planner)),
+                new MenuOption("Wróć", () => { })
+
+            });
+
+        }
+        //pomocnicza metoda do wyswietlania wydatków
+        private void ShowExpensesList(HomeBudgetPlanner planner)
+        {
             Console.Clear();
-            Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
-            Console.WriteLine("[STAN BUDŻETU]\n");
-            if (planner == null || planner.budgetItemsList.Count == 0)
+            Console.WriteLine("[SZCZEGÓŁY WYDATKÓW]\n");
+
+            bool empty = true;
+            foreach (var item in planner.budgetItemsList)
             {
-                Console.WriteLine("Nie ma tu żadnych wydatków/przychodów");
-                return;
+                if (!(item is Income))
+                {
+                    Console.WriteLine(item);
+                    empty = false;
+                }
             }
-            foreach (BudgetItem item in planner.budgetItemsList)
+
+            if (empty)
             {
-                Console.WriteLine(item);
+                Console.WriteLine("Brak wydatków.");
             }
-            Console.WriteLine("Naciśnij dowolny przyciska aby przejść dalej");
+
+            Console.WriteLine("\nNaciśnij dowolny przycisk aby wrócić.");
             Console.ReadKey();
         }
 
-
-        public void Login()
+        //pomocnicza metoda do wyświetlania przychodów
+        private void ShowIncomesList(HomeBudgetPlanner planner)
         {
             Console.Clear();
-            Console.WriteLine("[LOGOWANIE]");
-            Console.Write("Podaj nazwę: ");
-            string login = Console.ReadLine() ?? "";
-            Console.Write("Podaj hasło: ");
-            string password = Console.ReadLine() ?? "";
+            Console.WriteLine("[SZCZEGÓŁY PRZYCHODÓW]\n");
 
-            User? authenticatedUser = _userManager.Authenticate(login, password);
-
-            if (authenticatedUser != null)
+            bool empty = true;
+            foreach (var item in planner.budgetItemsList)
             {
-                AddUser(authenticatedUser.Nickname, authenticatedUser.Password, authenticatedUser.Status);
-                MainMenu();
+                if (item is Income)
+                {
+                    Console.WriteLine(item);
+                    empty = false;
+                }
+            }
+
+            if (empty)
+            {
+                Console.WriteLine("Brak przychodów.");
+            }
+
+            Console.WriteLine("\nNaciśnij dowolny przycisk aby wrócić.");
+            Console.ReadKey();
+        }
+
+        //metoda do logowania
+        public void Login()
+        {
+            //Console.Clear();
+            //Console.WriteLine("[LOGOWANIE]");
+            //Console.Write("Podaj nazwę: ");
+            //string login = Console.ReadLine() ?? "";
+            //Console.Write("Podaj hasło: ");
+            //string password = Console.ReadLine() ?? "";
+
+            //User? authenticatedUser = _userManager.Authenticate(login, password);
+
+            //if (authenticatedUser != null)
+            //{
+            //    AddUser(authenticatedUser.Nickname, authenticatedUser.Password, authenticatedUser.Status);
+            //    MainMenu();
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Błędny login lub hasło! Naciśnij dowolny klawisz.");
+            //    Console.ReadKey();
+            //}
+
+            Console.Write("Podaj nick do zalogowania: ");
+            string loginNick = Console.ReadLine() ?? "";
+            Console.Write("Podaj hasło: ");
+            string loginPass = Console.ReadLine() ?? "";
+
+            User? loggedUser = _userManager.Authenticate(loginNick, loginPass);
+
+            if (loggedUser != null)
+            {
+                Console.WriteLine($"\nZALOGOWANO POMYŚLNIE jako {loggedUser.Nickname} [{loggedUser.Status}]");
             }
             else
             {
-                Console.WriteLine("Błędny login lub hasło! Naciśnij klawisz...");
-                Console.ReadKey();
+                Console.WriteLine("\nBŁĄD: Nieprawidłowy login lub hasło. Nie można przetestować uprawnień.");
             }
-        }
 
+            
+        }
+        //metoda do rejestracji
         public void Register()
         {
-            Console.Clear();
-            Console.WriteLine("[REJESTRACJA]");
-            Console.Write("Nowa nazwa: ");
-            string login = Console.ReadLine() ?? "";
-            Console.Write("Nowe hasło: ");
+            //Console.Clear();
+            //Console.WriteLine("[REJESTRACJA]");
+            //Console.Write("Nowa nazwa: ");
+            //string login = Console.ReadLine() ?? "";
+            //Console.Write("Nowe hasło: ");
+            //string password = Console.ReadLine() ?? "";
+
+            //Console.WriteLine("Wybierz poziom (0-Guest, 1-NormalUser, 2-VIP, 3-Admin):");
+            //if (Enum.TryParse(Console.ReadLine(), out StatusLevel level))
+            //{
+            //    string? adminKey = null;
+            //    if (level >= StatusLevel.VIP)
+            //    {
+            //        Console.Write("Podaj hasło administratora, aby nadać te uprawnienia: ");
+            //        adminKey = Console.ReadLine();
+            //    }
+
+            //    if (_userManager.RegisterUser(login, password, level, adminKey))
+            //    {
+            //        Console.WriteLine("Zarejestrowano pomyślnie!");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Nazwa zajęta lub błędne hasło administratora.");
+            //    }
+            //}
+            //Console.ReadKey();
+
+            Console.WriteLine("\n[NOWY UŻYTKOWNIK]");
+
+            Console.Write("Podaj nick: ");
+            string nickname = Console.ReadLine() ?? "";
+
+            Console.Write("Podaj hasło: ");
             string password = Console.ReadLine() ?? "";
 
             Console.WriteLine("Wybierz poziom (0-Guest, 1-NormalUser, 2-VIP, 3-Admin):");
-            if (Enum.TryParse(Console.ReadLine(), out StatusLevel level))
+            if (!Enum.TryParse(Console.ReadLine(), out StatusLevel level))
             {
-                string? adminKey = null;
-                if (level >= StatusLevel.VIP)
-                {
-                    Console.Write("Podaj hasło administratora, aby nadać te uprawnienia: ");
-                    adminKey = Console.ReadLine();
-                }
-
-                if (_userManager.RegisterUser(login, password, level, adminKey))
-                {
-                    Console.WriteLine("Zarejestrowano pomyślnie!");
-                }
-                else
-                {
-                    Console.WriteLine("Nazwa zajęta lub błędne hasło administratora.");
-                }
+                Console.WriteLine("Błąd: Nieprawidłowy poziom!");
+                return;
             }
-            Console.ReadKey();
+
+            string? adminPass = null;
+            if (level == StatusLevel.VIP || level == StatusLevel.Admin)
+            {
+                Console.Write("Wymagane hasło administratora: ");
+                adminPass = Console.ReadLine();
+            }
+
+            bool success = _userManager.RegisterUser(nickname, password, level, adminPass);
+
+            if (success)
+            {
+                Console.WriteLine($"\nSUKCES: Użytkownik {nickname} został zapisany do users.json!");
+            }
+            else
+            {
+                Console.WriteLine("\nBŁĄD: Nie można dodać użytkownika (zajęty nick lub brak uprawnień admina).");
+            }
         }
 
+        //główne menu po zalogowaniu sie
         public void MainMenu()
         {
 
@@ -115,19 +221,21 @@ namespace HomeBudgetProject.Classes
                 {
                     new MenuOption("Dodaj Wydatek", () => AddExpenseMenu()),
                     new MenuOption("Dodaj Przychód", () => AddIncomeMenu()),
-                    new MenuOption("Pokaż Budżet", () => ShowPlan((HomeBudgetPlanner)((HomeBudgetPlannerProxy)_planner).GetRealService())),               
+                    new MenuOption("Pokaż Budżet", () => ShowPlan((HomeBudgetPlanner)((HomeBudgetPlannerProxy)_planner).GetRealService())),
+                    new MenuOption("Zapisz raport do pliku", () => GenerateReportMenu()),
                     new MenuOption("Wyloguj", () => { run = false; ShowLoginScreen(); })
                 });
             }
         }
 
+        //dodawanie wydatków
         private void AddExpenseMenu()
         {
             Console.Clear();
             Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
             Console.WriteLine("[DODAWANIE WYDATKU]\n");
 
-            Console.WriteLine("Podaj nazwę kategorii: ");
+            Console.Write("Podaj nazwę kategorii: ");
             string mainCategory = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(mainCategory)) mainCategory = "Ogólne";
 
@@ -155,11 +263,11 @@ namespace HomeBudgetProject.Classes
             else
             {
                 Console.WriteLine("Podana wartość jest nieprawidłowa!");
-                Console.WriteLine("Naciśnij dowolny przyciska aby przejść dalej");
+                Console.WriteLine("Naciśnij dowolny przycisk aby przejść dalej");
                 Console.ReadKey();
             }
         }
-
+        //dodawanie przychodów
         private void AddIncomeMenu()
         {
             Console.Clear();
@@ -175,21 +283,48 @@ namespace HomeBudgetProject.Classes
             else
             {
                 Console.WriteLine("Podana wartość jest nieprawidłowa!");
-                Console.WriteLine("Naciśnij dowolny przyciska aby przejść dalej");
+                Console.WriteLine("Naciśnij dowolny przycisk aby przejść dalej");
                 Console.ReadKey();
             }
         }
-
-
-
-        public void ShowCategories(HomeBudgetPlanner planner)
+        //ekran z wyborem formatu pliku
+        private void GenerateReportMenu()
         {
-            Console.WriteLine("Lista elementów w budżecie:");
+            Console.Clear();
+            Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
+            Console.WriteLine("[GENEROWANIE RAPORTU DO PLIKU]\n");
+            Console.WriteLine("Wybierz format pliku:");
+            ShowMenu(new List<MenuOption>
+    {
+        new MenuOption("Zapisz jako .PDF", () =>
+        {
+            _planner.SetStrategy(new PDFRaportStrategy());
+            _planner.GenerateRaport();
+            Console.WriteLine("\nNaciśnij dowolny klawisz.");
+            Console.ReadKey();
+        }),
+        new MenuOption("Zapisz jako .CSV", () =>
+        {
+            _planner.SetStrategy(new CSVRaportStrategy());
+            _planner.GenerateRaport();
+            Console.WriteLine("\nNaciśnij dowolny klawisz.");
+            Console.ReadKey();
+        }),
+        new MenuOption("Wróć", () => { }) 
+    });
+
         }
 
-        public void ShowCategoryDetails(BudgetGroup group)
+        //metoda odpowiedzialna za dodanie nowego użytkownika
+        private void AddUser(string name, string pass, StatusLevel status)
         {
-            Console.WriteLine($"Szczegóły grupy {group.Name}:");
+            _currentUser = new User(name, pass, status);
+
+            var realPlanner = new HomeBudgetPlanner();
+
+            realPlanner.Attach(this);
+
+            _planner = new HomeBudgetPlannerProxy(_currentUser, realPlanner);
         }
 
         public void ShowMenu(List<MenuOption> options)
@@ -210,17 +345,7 @@ namespace HomeBudgetProject.Classes
                 Console.WriteLine("Nieprawidłowy wybór.");
             }
         }
-
-        private void AddUser(string name, string pass, StatusLevel status)
-        {
-            _currentUser = new User(name, pass, status);
-
-            var realPlanner = new HomeBudgetPlanner();
-
-            realPlanner.Attach(this);
-
-            _planner = new HomeBudgetPlannerProxy(_currentUser, realPlanner);
-        }
+      
 
     }
 

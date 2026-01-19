@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace HomeBudgetProject.Classes
 {
     public class BudgetGroup : BudgetItem
@@ -31,15 +33,18 @@ namespace HomeBudgetProject.Classes
 
         public override string ToString()
         {
-            string result = $"{Category}: {Name}  -  £¹cznie: {GetValue()} z³\n";
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"[{Name}] - £¹cznie: {GetValue()} z³");
+
             foreach (BudgetItem item in budgetItemList)
             {
-                string childstring = item.ToString();
+                string childText = item.ToString();
+                string indentedChild = "\n\t" + childText.Replace("\n", "\n\t");
+                sb.Append(indentedChild);
+            }
 
-                string indentedChild = "\n\t" + childstring.Replace("\n", "\n\t");
-                result += indentedChild;
-            }     
-            return result;
+            return sb.ToString();
         }
 
 
