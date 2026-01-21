@@ -324,6 +324,8 @@ namespace HomeBudgetProject.Classes
 
             realPlanner.Attach(this);
 
+            realPlanner.Attach(new AutoRaportUpdater());
+
             _planner = new HomeBudgetPlannerProxy(_currentUser, realPlanner);
         }
 
