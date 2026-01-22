@@ -98,7 +98,6 @@ namespace HomeBudgetProject.Classes
                 }
                 else
                 {
-                    // Wydatki dodajemy bez łączenia
                     existingGroup.Add(newItem);
                 }
             }
@@ -118,13 +117,13 @@ namespace HomeBudgetProject.Classes
             return total;
         }
 
-        public float GetTotalExpenses()
+        public float GetTotalExpense()
         {
             float total = 0;
 
             foreach (var item in budgetItemsList)
             {
-                if (!(item is Income))
+                if (!(item is Expense))
                 {
                     total += item.GetValue();
                 }
@@ -135,7 +134,12 @@ namespace HomeBudgetProject.Classes
 
         public float GetBalance()
         {
-            return GetTotalIncome() - GetTotalExpenses();
+            return GetTotalIncome() - GetTotalExpense();
+        }
+
+        public List<BudgetItem> GetBudgetItems()
+        {
+            return budgetItemsList;
         }
 
         public void Attach(IBudgetObserver observer)

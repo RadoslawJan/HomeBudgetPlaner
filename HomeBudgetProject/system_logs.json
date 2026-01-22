@@ -1,0 +1,20 @@
+﻿[
+  {
+    "logType": 3,
+    "user": {
+      "Nickname": "guest",
+      "Password": "guest",
+      "Status": 0
+    },
+    "description": "Próba dodania wydatku przez gościa"
+  },
+  {
+    "logType": 2,
+    "user": {
+      "Nickname": "guest",
+      "Password": "guest",
+      "Status": 0
+    },
+    "description": "Dodano nowy przychód"
+  }
+]

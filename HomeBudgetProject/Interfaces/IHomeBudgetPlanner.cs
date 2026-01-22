@@ -12,6 +12,7 @@ namespace HomeBudgetProject.Interfaces
         void AddIncome(Income item);
         void AddExpense(Expense item);
         void AddGroup(BudgetGroup group);
+        List<BudgetItem> GetBudgetItems();
         void GenerateRaport();
         void SetStrategy(IRaportStrategy strategy);
         void Attach(IBudgetObserver observer);

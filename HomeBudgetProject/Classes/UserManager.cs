@@ -13,6 +13,7 @@ namespace HomeBudgetProject.Classes
     {
         private const string FilePath = "users.json";
         private List<User> users;
+        public User currentUser;
 
         public UserManager()
         {
@@ -137,6 +138,16 @@ namespace HomeBudgetProject.Classes
                 byte[] bytes = Encoding.UTF8.GetBytes(password);
                 byte[] hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
+            }
+        }
+
+        public void AddUser(string name, string pass, StatusLevel status)
+        {
+            currentUser = new User(name, pass, status);
+            if (currentUser.Status != StatusLevel.Guest)
+            {
+                users.Add(currentUser);
+                SaveUsers();
             }
         }
     }

@@ -1,6 +1,5 @@
 using HomeBudgetProject.Enums;
 using System.Text.Json;
-using System.IO;
 
 namespace HomeBudgetProject.Classes
 {
@@ -33,7 +32,7 @@ namespace HomeBudgetProject.Classes
         {
             if (currentUser.Status != StatusLevel.Admin)
             {
-                Console.WriteLine("Brak uprawnieñ do przegl¹dania logów systemowych!");
+                Console.WriteLine("Brak uprawnieï¿½ do przeglï¿½dania logï¿½w systemowych!");
                 return;
             }
 
@@ -50,7 +49,7 @@ namespace HomeBudgetProject.Classes
             try
             {
                 string logs = File.ReadAllText(filePath, System.Text.Encoding.UTF8); //domyslnie bez polskichznakow
-                List<Log> loadedLogs = JsonSerializer.Deserialize<List<Log>>(logs);  //Informacja na ¿ó³to ¿e mo¿e byæ null, ale poni¿ej sprawdzenie
+                List<Log> loadedLogs = JsonSerializer.Deserialize<List<Log>>(logs);  //Informacja na ï¿½ï¿½to ï¿½e moï¿½e byï¿½ null, ale poniï¿½ej sprawdzenie
                 if(loadedLogs == null) {  return new List<Log>(); }
                 return loadedLogs;
             }
@@ -59,38 +58,10 @@ namespace HomeBudgetProject.Classes
         private void SaveLogs()
         {
             JsonSerializerOptions options = new JsonSerializerOptions();
-            options.WriteIndented = true; // dla ³adnego wyœwietlania
+            options.WriteIndented = true; // dla ï¿½adnego wyï¿½wietlania
             options.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping; //dodatkowo do utf-8
             string logs = JsonSerializer.Serialize(logEntries, options);
             File.WriteAllText(filePath, logs, System.Text.Encoding.UTF8);
         }
-
-    }
-
-    internal class Log
-    {
-        public LogType logType { get; set; }
-        public User user { get; set; }
-        public string? description { get; set; }
-
-        public Log(LogType logType, User user, string description)
-        {
-            this.logType = logType;
-            this.user = user;
-            this.description = description;
-        }
-
-        public override string ToString()
-        {
-            return $"[{logType}] {user.Nickname} {description}";
-        }
-    }
-
-    public enum LogType
-    {
-        LogIn,
-        LogOut,
-        SuccessfulOperation,
-        FailedOperation
     }
 }

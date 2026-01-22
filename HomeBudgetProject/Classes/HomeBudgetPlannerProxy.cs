@@ -41,6 +41,24 @@ namespace HomeBudgetProject.Classes
             logger.Log(LogType.SuccessfulOperation, user, $"Dodano nową grupę");
         }
 
+        public float GetTotalIncome()
+        {
+            return _realService.GetTotalIncome();
+        }
+
+        public float GetTotalExpense()
+        {
+             return _realService.GetTotalExpense();
+        }
+        public float GetBalance()
+        {
+             return _realService.GetBalance();
+        }
+        public List<BudgetItem> GetBudgetItems()
+        {
+            return _realService.GetBudgetItems();
+        }
+
         public void Attach(IBudgetObserver observer)
         {
             _realService.Attach(observer);
@@ -49,6 +67,11 @@ namespace HomeBudgetProject.Classes
         public void Detach(IBudgetObserver observer)
         {
             _realService.Detach(observer);
+        }
+
+        public void Notify()
+        {
+            _realService.Notify();
         }
 
         public void GenerateRaport()
@@ -62,11 +85,6 @@ namespace HomeBudgetProject.Classes
             _realService.GenerateRaport();
             logger.Log(LogType.SuccessfulOperation, user, $"Wygenerowano raport {_realService.raportStrategy}");
        
-        }
-
-        public void Notify()
-        {
-            _realService.Notify();
         }
 
         public void SetStrategy(IRaportStrategy strategy)

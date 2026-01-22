@@ -31,11 +31,38 @@ namespace HomeBudgetProject.Classes
             return total;
         }
 
+        public float GetIncome()
+        {
+            float income = 0;
+            foreach (BudgetItem item in budgetItemList)
+            {
+                if (item is Income)
+                {
+                    income += item.GetValue();
+                }
+            }
+            return income;
+        }
+
+        public float GetExpense()
+        {
+            float expense = 0;
+            foreach (BudgetItem item in budgetItemList)
+            {
+                if (item is Expense)
+                {
+                    expense += item.GetValue();
+                }
+            }
+            return expense;
+        }
+
+
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"[{Name}] - £πcznie: {GetValue()} z≥");
+            sb.Append($"[{Name}] - ≈ÅƒÖcznie: {GetValue()} z≈Ç");
 
             foreach (BudgetItem item in budgetItemList)
             {
