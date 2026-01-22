@@ -18,15 +18,19 @@ namespace HomeBudgetProject.Classes
         //początkowy ekran
         public void ShowLoginScreen()
         {
-            Console.Clear();
-            Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
-            ShowMenu(new List<MenuOption>
+            while (true)
             {
-                new MenuOption("Wypróbuj jako gość", () => {AddUser("guest", "guest", StatusLevel.Guest); MainMenu(); }),
-                new MenuOption("Zaloguje się", () => Login()),
-                new MenuOption("Zarejestruj się", () => Register()),
-                new MenuOption("Zakończ", () => Environment.Exit(0))
-            });
+                Console.Clear();
+                Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
+                ShowMenu(new List<MenuOption>
+                {
+                    new MenuOption("Wypróbuj jako gość", () => {AddUser("guest", "guest", StatusLevel.Guest); MainMenu(); }),
+                    new MenuOption("Zaloguje się", () => Login()),
+                    new MenuOption("Zarejestruj się", () => Register()),
+                    new MenuOption("Zakończ", () => Environment.Exit(0))
+                });
+            }
+            
 
         }
         //menu po wejściu w stan budżetu

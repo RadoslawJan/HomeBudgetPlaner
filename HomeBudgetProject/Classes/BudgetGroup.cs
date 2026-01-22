@@ -4,7 +4,7 @@ namespace HomeBudgetProject.Classes
 {
     public class BudgetGroup : BudgetItem
     {
-        public List<BudgetItem> budgetItemList = new List<BudgetItem>();
+        public List<BudgetItem> budgetItemList { get; set; } = new List<BudgetItem>();
         string Category;
 
         public BudgetGroup(string name, string category): base(name, 0)
