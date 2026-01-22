@@ -30,7 +30,7 @@ namespace HomeBudgetProject.Classes
 
             if (adminFound == false)
             {
-                users.Add(new User("admin", "admin", StatusLevel.Admin));
+                users.Add(new User("admin", HashPaswd("admin"), StatusLevel.Admin));
                 SaveUsers();
             }
         }
@@ -44,7 +44,7 @@ namespace HomeBudgetProject.Classes
 
             try
             {
-                string json = File.ReadAllText(FilePath);
+                string json = File.ReadAllText(FilePath, Encoding.UTF8);
                 List<User> list = JsonSerializer.Deserialize<List<User>>(json);
 
                 if (list == null)
@@ -66,14 +66,16 @@ namespace HomeBudgetProject.Classes
             options.WriteIndented = true; //formatowanie w przystępny sposób
 
             string json = JsonSerializer.Serialize(users, options);
-            File.WriteAllText(FilePath, json);
+            File.WriteAllText(FilePath, json, System.Text.Encoding.UTF8);
         }
 
         public User Authenticate(string nickname, string password)
         {
+            string hashedPassword = HashPaswd(password);
+
             foreach (User u in users)
             {
-                if (u.Nickname == nickname && u.Password == password)
+                if (u.Nickname == nickname && u.Password == hashedPassword)
                 {
                     return u;
                 }
@@ -83,6 +85,7 @@ namespace HomeBudgetProject.Classes
 
         public bool RegisterUser(string nickname, string password, StatusLevel level, string adminAuthPassword = null)
         {
+            string hashedAdminAuthPassword = HashPaswd(adminAuthPassword);
             bool exists = false;
             foreach (User u in users)
             {
@@ -110,15 +113,25 @@ namespace HomeBudgetProject.Classes
                     }
                 }
 
-                if (admin == null || admin.Password != adminAuthPassword)
+                if (admin == null || admin.Password != hashedAdminAuthPassword)
                 {
                     return false;
                 }
             }
 
-            users.Add(new User(nickname, password, level));
+            users.Add(new User(nickname, HashPaswd(password), level));
             SaveUsers();
             return true;
+        }
+
+        private string HashPaswd(string password) 
+        {
+            using (System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(password);
+                byte[] hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
         }
     }
 }
