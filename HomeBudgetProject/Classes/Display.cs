@@ -103,107 +103,107 @@ namespace HomeBudgetProject.Classes
         //metoda do logowania
         public void Login()
         {
-            //Console.Clear();
-            //Console.WriteLine("[LOGOWANIE]");
-            //Console.Write("Podaj nazwę: ");
-            //string login = Console.ReadLine() ?? "";
-            //Console.Write("Podaj hasło: ");
-            //string password = Console.ReadLine() ?? "";
-
-            //User? authenticatedUser = userManager.Authenticate(login, password);
-
-            //if (authenticatedUser != null)
-            //{
-            //    AddUser(authenticatedUser.Nickname, authenticatedUser.Password, authenticatedUser.Status);
-            //    MainMenu();
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Błędny login lub hasło! Naciśnij dowolny klawisz.");
-            //    Console.ReadKey();
-            //}
-
-            Console.Write("Podaj nick do zalogowania: ");
-            string loginNick = Console.ReadLine() ?? "";
+            Console.Clear();
+            Console.WriteLine("[LOGOWANIE]");
+            Console.Write("Podaj nazwę: ");
+            string login = Console.ReadLine() ?? "";
             Console.Write("Podaj hasło: ");
-            string loginPass = Console.ReadLine() ?? "";
+            string password = Console.ReadLine() ?? "";
 
-            User? loggedUser = userManager.Authenticate(loginNick, loginPass);
+            User? authenticatedUser = userManager.Authenticate(login, password);
 
-            if (loggedUser != null)
+            if (authenticatedUser != null)
             {
-                Console.WriteLine($"\nZALOGOWANO POMYŚLNIE jako {loggedUser.Nickname} [{loggedUser.Status}]");
+                AddUser(authenticatedUser.Nickname, authenticatedUser.Password, authenticatedUser.Status);
+                MainMenu();
             }
             else
             {
-                Console.WriteLine("\nBŁĄD: Nieprawidłowy login lub hasło. Nie można przetestować uprawnień.");
+                Console.WriteLine("Błędny login lub hasło! Naciśnij dowolny klawisz.");
+                Console.ReadKey();
             }
+
+            //Console.Write("Podaj nick do zalogowania: ");
+            //string loginNick = Console.ReadLine() ?? "";
+            //Console.Write("Podaj hasło: ");
+            //string loginPass = Console.ReadLine() ?? "";
+
+            //User? loggedUser = userManager.Authenticate(loginNick, loginPass);
+
+            //if (loggedUser != null)
+            //{
+            //    Console.WriteLine($"\nZALOGOWANO POMYŚLNIE jako {loggedUser.Nickname} [{loggedUser.Status}]");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("\nBŁĄD: Nieprawidłowy login lub hasło. Nie można przetestować uprawnień.");
+            //}
 
             
         }
         //metoda do rejestracji
         public void Register()
         {
-            //Console.Clear();
-            //Console.WriteLine("[REJESTRACJA]");
-            //Console.Write("Nowa nazwa: ");
-            //string login = Console.ReadLine() ?? "";
-            //Console.Write("Nowe hasło: ");
-            //string password = Console.ReadLine() ?? "";
-
-            //Console.WriteLine("Wybierz poziom (0-Guest, 1-NormalUser, 2-VIP, 3-Admin):");
-            //if (Enum.TryParse(Console.ReadLine(), out StatusLevel level))
-            //{
-            //    string? adminKey = null;
-            //    if (level >= StatusLevel.VIP)
-            //    {
-            //        Console.Write("Podaj hasło administratora, aby nadać te uprawnienia: ");
-            //        adminKey = Console.ReadLine();
-            //    }
-
-            //    if (userManager.RegisterUser(login, password, level, adminKey))
-            //    {
-            //        Console.WriteLine("Zarejestrowano pomyślnie!");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Nazwa zajęta lub błędne hasło administratora.");
-            //    }
-            //}
-            //Console.ReadKey();
-
-            Console.WriteLine("\n[NOWY UŻYTKOWNIK]");
-
-            Console.Write("Podaj nick: ");
-            string nickname = Console.ReadLine() ?? "";
-
-            Console.Write("Podaj hasło: ");
+            Console.Clear();
+            Console.WriteLine("[REJESTRACJA]");
+            Console.Write("Nowa nazwa: ");
+            string login = Console.ReadLine() ?? "";
+            Console.Write("Nowe hasło: ");
             string password = Console.ReadLine() ?? "";
 
             Console.WriteLine("Wybierz poziom (0-Guest, 1-NormalUser, 2-VIP, 3-Admin):");
-            if (!Enum.TryParse(Console.ReadLine(), out StatusLevel level))
+            if (Enum.TryParse(Console.ReadLine(), out StatusLevel level))
             {
-                Console.WriteLine("Błąd: Nieprawidłowy poziom!");
-                return;
-            }
+                string? adminKey = null;
+                if (level >= StatusLevel.VIP)
+                {
+                    Console.Write("Podaj hasło administratora, aby nadać te uprawnienia: ");
+                    adminKey = Console.ReadLine();
+                }
 
-            string? adminPass = null;
-            if (level == StatusLevel.VIP || level == StatusLevel.Admin)
-            {
-                Console.Write("Wymagane hasło administratora: ");
-                adminPass = Console.ReadLine();
+                if (userManager.RegisterUser(login, password, level, adminKey))
+                {
+                    Console.WriteLine("Zarejestrowano pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Nazwa zajęta lub błędne hasło administratora.");
+                }
             }
+            Console.ReadKey();
 
-            bool success = userManager.RegisterUser(nickname, password, level, adminPass);
+            //Console.WriteLine("\n[NOWY UŻYTKOWNIK]");
 
-            if (success)
-            {
-                Console.WriteLine($"\nSUKCES: Użytkownik {nickname} został zapisany do users.json!");
-            }
-            else
-            {
-                Console.WriteLine("\nBŁĄD: Nie można dodać użytkownika (zajęty nick lub brak uprawnień admina).");
-            }
+            //Console.Write("Podaj nick: ");
+            //string nickname = Console.ReadLine() ?? "";
+
+            //Console.Write("Podaj hasło: ");
+            //string password = Console.ReadLine() ?? "";
+
+            //Console.WriteLine("Wybierz poziom (0-Guest, 1-NormalUser, 2-VIP, 3-Admin):");
+            //if (!Enum.TryParse(Console.ReadLine(), out StatusLevel level))
+            //{
+            //    Console.WriteLine("Błąd: Nieprawidłowy poziom!");
+            //    return;
+            //}
+
+            //string? adminPass = null;
+            //if (level == StatusLevel.VIP || level == StatusLevel.Admin)
+            //{
+            //    Console.Write("Wymagane hasło administratora: ");
+            //    adminPass = Console.ReadLine();
+            //}
+
+            //bool success = userManager.RegisterUser(nickname, password, level, adminPass);
+
+            //if (success)
+            //{
+            //    Console.WriteLine($"\nSUKCES: Użytkownik {nickname} został zapisany do users.json!");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("\nBŁĄD: Nie można dodać użytkownika (zajęty nick lub brak uprawnień admina).");
+            //}
         }
 
         //główne menu po zalogowaniu sie

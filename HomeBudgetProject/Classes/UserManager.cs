@@ -85,7 +85,13 @@ namespace HomeBudgetProject.Classes
 
         public bool RegisterUser(string nickname, string password, StatusLevel level, string adminAuthPassword = null)
         {
-            string hashedAdminAuthPassword = HashPaswd(adminAuthPassword);
+            string hashedAdminAuthPassword;
+            if (adminAuthPassword == null)
+            {
+                hashedAdminAuthPassword = adminAuthPassword;
+            }
+            else { hashedAdminAuthPassword = HashPaswd(adminAuthPassword); }
+
             bool exists = false;
             foreach (User u in users)
             {

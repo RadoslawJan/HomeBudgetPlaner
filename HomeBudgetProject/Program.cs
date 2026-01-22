@@ -9,7 +9,7 @@ namespace HomeBudgetProject
         {
 
 
-
+            /*
             UserManager userManager = new UserManager();
             bool running = true;
 
@@ -85,18 +85,21 @@ namespace HomeBudgetProject
             Console.WriteLine("\nKoniec programu. Naciśnij dowolny klawisz...");
             Console.ReadKey();
 
-
-            /*
+            */
+            
             Display display = new Display();
-            User guest = new User("guest", "guest", StatusLevel.Guest);
+            display.ShowLoginScreen();
+            //User guest = new User("guest", "guest", StatusLevel.Guest);
+            /*
             Logger logger = Logger.GetInstance();
+
 
             HomeBudgetPlanner planner = new HomeBudgetPlanner();
             HomeBudgetPlannerProxy plannerProxy = new HomeBudgetPlannerProxy(guest, planner);
 
 
-            display.ShowLoginScreen();
-
+           
+            
             plannerProxy.AddExpense(new Expense("Wengiel", 300));
             display.ShowPlan(planner);
 
