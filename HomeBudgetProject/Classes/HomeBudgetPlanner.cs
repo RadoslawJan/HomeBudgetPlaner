@@ -1,22 +1,32 @@
 ﻿using HomeBudgetProject.Interfaces;
+using System.Text.Json;
+using System.IO;
+using System.Text;
 
 namespace HomeBudgetProject.Classes
 {
     public class HomeBudgetPlanner : IHomeBudgetPlanner
     {
+        private string filePath = "budget.json";
         private List<IBudgetObserver> observers = new List<IBudgetObserver>();
         public List<BudgetItem> budgetItemsList = new List<BudgetItem>();
         public IRaportStrategy raportStrategy;
+        public HomeBudgetPlanner()
+        {
+            LoadBudget();
+        }
         public void AddExpense(Expense item)
         {
             budgetItemsList.Add(item);
             Notify();
+            SaveBudget();
         }
 
         public void AddIncome(Income item)
         {
             budgetItemsList.Add(item);
             Notify();
+            SaveBudget();
         }
 
         public void AddGroup(BudgetGroup group)
@@ -33,8 +43,8 @@ namespace HomeBudgetProject.Classes
 
                     if (name1 == name2)
                     {
-                        exist = groupToCheck; 
-                        break; 
+                        exist = groupToCheck;
+                        break;
                     }
                 }
             }
@@ -48,6 +58,7 @@ namespace HomeBudgetProject.Classes
                 budgetItemsList.Add(group);
             }
             Notify();
+            SaveBudget();
         }
 
         //metoda potrzebna żeby łączyć podkategorie
@@ -58,7 +69,7 @@ namespace HomeBudgetProject.Classes
                 if (newItem is BudgetGroup newSubGroup)
                 {
 
-                    BudgetGroup existingSubGroup = null; 
+                    BudgetGroup existingSubGroup = null;
 
                     foreach (var existingItem in existingGroup.budgetItemList)
                     {
@@ -160,6 +171,35 @@ namespace HomeBudgetProject.Classes
         public void SetStrategy(IRaportStrategy strategy)
         {
             this.raportStrategy = strategy;
+        }
+
+        //obsługa Json
+
+        private void LoadBudget()
+        {
+            if (File.Exists(filePath) == false) { return; }
+            try
+            {
+                string json = File.ReadAllText(filePath, Encoding.UTF8);
+                List<BudgetItem> lista = JsonSerializer.Deserialize<List<BudgetItem>>(json);
+                if (lista != null)
+                {
+                    budgetItemsList = lista;
+                }
+            }
+            catch
+            {
+                budgetItemsList = new List<BudgetItem>();
+            }
+        }
+        private void SaveBudget()
+        {
+            JsonSerializerOptions option = new JsonSerializerOptions();
+            option.WriteIndented = true;
+            option.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+
+            string content = JsonSerializer.Serialize(budgetItemsList, option);
+            File.WriteAllText(filePath, content, Encoding.UTF8);
         }
     }
 }

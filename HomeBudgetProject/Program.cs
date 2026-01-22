@@ -74,6 +74,8 @@ namespace HomeBudgetProject
             if (loggedUser != null)
             {
                 Console.WriteLine($"\nZALOGOWANO POMYŚLNIE jako {loggedUser.Nickname} [{loggedUser.Status}]");
+                Logger logger = Logger.GetInstance();
+                logger.Log(LogType.LogIn, loggedUser, $"Użytkownik {loggedUser.Nickname} wszedł do systemu");
             }
             else
             {
@@ -82,8 +84,6 @@ namespace HomeBudgetProject
 
             Console.WriteLine("\nKoniec programu. Naciśnij dowolny klawisz...");
             Console.ReadKey();
-
-
 
 
             /*

@@ -7,8 +7,8 @@ namespace HomeBudgetProject.Classes
     internal class Display : IBudgetObserver
     {
         private IHomeBudgetPlanner _planner;
-        private UserManager _userManager = new UserManager();
-        private User _currentUser;
+        private UserManager userManager = new UserManager();
+        private User currentUser;
         public void Update(HomeBudgetPlanner planner)
         {
             Console.WriteLine("Dokonano zmian w budżecie");
@@ -110,7 +110,7 @@ namespace HomeBudgetProject.Classes
             //Console.Write("Podaj hasło: ");
             //string password = Console.ReadLine() ?? "";
 
-            //User? authenticatedUser = _userManager.Authenticate(login, password);
+            //User? authenticatedUser = userManager.Authenticate(login, password);
 
             //if (authenticatedUser != null)
             //{
@@ -128,7 +128,7 @@ namespace HomeBudgetProject.Classes
             Console.Write("Podaj hasło: ");
             string loginPass = Console.ReadLine() ?? "";
 
-            User? loggedUser = _userManager.Authenticate(loginNick, loginPass);
+            User? loggedUser = userManager.Authenticate(loginNick, loginPass);
 
             if (loggedUser != null)
             {
@@ -161,7 +161,7 @@ namespace HomeBudgetProject.Classes
             //        adminKey = Console.ReadLine();
             //    }
 
-            //    if (_userManager.RegisterUser(login, password, level, adminKey))
+            //    if (userManager.RegisterUser(login, password, level, adminKey))
             //    {
             //        Console.WriteLine("Zarejestrowano pomyślnie!");
             //    }
@@ -194,7 +194,7 @@ namespace HomeBudgetProject.Classes
                 adminPass = Console.ReadLine();
             }
 
-            bool success = _userManager.RegisterUser(nickname, password, level, adminPass);
+            bool success = userManager.RegisterUser(nickname, password, level, adminPass);
 
             if (success)
             {
@@ -215,7 +215,7 @@ namespace HomeBudgetProject.Classes
             {
                 Console.Clear();
                 Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
-                Console.WriteLine($"\nWitaj! {_currentUser.Nickname} [{_currentUser.Status}]\n");
+                Console.WriteLine($"\nWitaj! {currentUser.Nickname} [{currentUser.Status}]\n");
 
                 ShowMenu(new List<MenuOption>
                 {
@@ -318,7 +318,7 @@ namespace HomeBudgetProject.Classes
         //metoda odpowiedzialna za dodanie nowego użytkownika
         private void AddUser(string name, string pass, StatusLevel status)
         {
-            _currentUser = new User(name, pass, status);
+            currentUser = new User(name, pass, status);
 
             var realPlanner = new HomeBudgetPlanner();
 
@@ -326,7 +326,7 @@ namespace HomeBudgetProject.Classes
 
             realPlanner.Attach(new AutoRaportUpdater());
 
-            _planner = new HomeBudgetPlannerProxy(_currentUser, realPlanner);
+            _planner = new HomeBudgetPlannerProxy(currentUser, realPlanner);
         }
 
         public void ShowMenu(List<MenuOption> options)
