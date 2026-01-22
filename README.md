@@ -29,7 +29,7 @@ Kontrola dostępu do metod modyfikujących budżet oraz generujących raporty w 
 Użycie: inicjalizacja w `Display.cs` (metoda `AddUser`)
 
 **Wektor zmian:**  
-Przy użyciu tego wzorca można by było dodać buforowanie do obliczania wyników balansu, jeżeli będą tysiące wpisów dla budżetu. Dzięki temu program automatycznie poda ostatnią wartośćz pamięci jeżeli nie dodano żadnego wydatku.
+Przy użyciu tego wzorca można by dodać buforowanie do obliczania wyników balansu, jeżeli będzie znacząca ilość wpisów dla budżetu. Dzięki temu program automatycznie poda ostatnią wartość z pamięci - jeżeli nie dodano żadnego wydatku.
 
 ---
 
@@ -71,7 +71,7 @@ Reprezentacja hierarchicznej struktury wydatków, gdzie kategoria może zawiera�
 `Classes/BudgetGroup.cs`
 
 **Wektor zmian:**  
-Wzorzec ten idealnie sprawdził by jeżeli naszą aplikację rozszerzylibyśmy o konta i portfele. Majątek całkowity byłby głównym kompozytem.
+Wzorzec ten idealnie sprawdziłby się, jeżeli naszą aplikację rozszerzylibyśmy o konta i portfele. Majątek całkowity byłby głównym komponentem.
 
 ---
 
@@ -92,7 +92,7 @@ Automatyczne powiadamianie komponentów (interfejsu użytkownika oraz modułu au
 Metoda `Notify()` w `HomeBudgetPlanner.cs`
 
 **Wektor zmian:**  
-Możliwość dodania modułu powiadomień po przekroczeniu limitu wydatków. Mogło by być to wysyłane przy użyciu System.Net.Mail.
+Możliwość dodania modułu powiadomień po przekroczeniu limitu wydatków. Możliwość zrealizowania przy użyciu System.Net.Mail.
 
 ---
 
