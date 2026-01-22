@@ -15,7 +15,7 @@ Poniższy diagram przedstawia architekturę systemu wraz z zastosowanymi przez n
 ### 1. Proxy
 
 **Cel użycia:**  
-Kontrola dostępu do metod modyfikujących budżet oraz generujących raporty w zależności od poziomu uprawnień zalogowanego użytkownika dla przykładu `Gość` nie może dodawać wydatków.
+Kontrola dostępu do metod modyfikujących budżet oraz generujących raporty w zależności od poziomu uprawnień zalogowanego użytkownika dla przykładu `Gość` nie może generować raportów.
 
 ![Proxy](images/proxy.png)
 
@@ -26,7 +26,7 @@ Kontrola dostępu do metod modyfikujących budżet oraz generujących raporty w 
 
 **Lokalizacja:**  
 `Classes/HomeBudgetPlannerProxy.cs`  
-Użycie: inicjalizacja w `Display.cs` (metoda `AddUser`)
+Użycie: inicjalizacja w `Display.cs`
 
 **Wektor zmian:**  
 Przy użyciu tego wzorca można by dodać buforowanie do obliczania wyników balansu, jeżeli będzie znacząca ilość wpisów dla budżetu. Dzięki temu program automatycznie poda ostatnią wartość z pamięci - jeżeli nie dodano żadnego wydatku.
