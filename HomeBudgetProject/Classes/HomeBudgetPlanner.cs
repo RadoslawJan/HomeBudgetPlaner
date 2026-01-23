@@ -54,7 +54,7 @@ namespace HomeBudgetProject.Classes
             float total = 0;
             foreach (var item in budgetItemsList)
             {
-                if (item is Income)
+                if (item is not Expense)
                 {
                     total += item.GetValue();
                 }
@@ -69,7 +69,7 @@ namespace HomeBudgetProject.Classes
 
             foreach (var item in budgetItemsList)
             {
-                if (item is Expense)
+                if (item is not Income)
                 {
                     total += item.GetValue();
                 }

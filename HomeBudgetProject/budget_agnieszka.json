@@ -1,0 +1,22 @@
+﻿[
+  {
+    "$type": "Group expense",
+    "budgetItemList": [
+      {
+        "$type": "Expense",
+        "Name": "zakupy",
+        "Value": 200,
+        "Date": "2026-01-23T11:42:21.43447+01:00"
+      }
+    ],
+    "Name": "spozywcze",
+    "Value": 0,
+    "Date": "2026-01-23T11:42:11.492378+01:00"
+  },
+  {
+    "$type": "Income",
+    "Name": "praca",
+    "Value": 5500,
+    "Date": "2026-01-23T11:42:35.693055+01:00"
+  }
+]

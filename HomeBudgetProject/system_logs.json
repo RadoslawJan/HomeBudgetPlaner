@@ -1,20 +1,38 @@
 ﻿[
   {
-    "logType": 3,
+    "logType": 2,
     "user": {
-      "Nickname": "guest",
-      "Password": "guest",
-      "Status": 0
+      "Nickname": "Piotrek",
+      "Password": "tKdcpr+XgIRZFhZ4URz8caKEHdkqrvnEf6rVYb2h9Ow=",
+      "Status": 2
     },
-    "description": "Nie posiada uprawnień do zmiany formatu raportu"
+    "description": "Dodano nową grupę"
   },
   {
-    "logType": 3,
+    "logType": 2,
     "user": {
-      "Nickname": "guest",
-      "Password": "guest",
-      "Status": 0
+      "Nickname": "Piotrek",
+      "Password": "tKdcpr+XgIRZFhZ4URz8caKEHdkqrvnEf6rVYb2h9Ow=",
+      "Status": 2
     },
-    "description": "Nie posiada uprawnień do generowania raportu"
+    "description": "Dodano nową grupę"
+  },
+  {
+    "logType": 2,
+    "user": {
+      "Nickname": "agnieszka",
+      "Password": "kT9LSEIRz2BfQB2EA50DBvZevb2FPRuME6NlIoEO2Dw=",
+      "Status": 2
+    },
+    "description": "Dodano nową grupę"
+  },
+  {
+    "logType": 2,
+    "user": {
+      "Nickname": "agnieszka",
+      "Password": "kT9LSEIRz2BfQB2EA50DBvZevb2FPRuME6NlIoEO2Dw=",
+      "Status": 2
+    },
+    "description": "Dodano nowy przychód"
   }
 ]
