@@ -14,7 +14,8 @@ namespace HomeBudgetProject
             {
                 User loggedUser = display.ShowLoginScreen(userManager);
 
-                HomeBudgetPlanner planner = new HomeBudgetPlanner();
+                HomeBudgetPlanner planner = new HomeBudgetPlanner(loggedUser.Nickname);
+
                 planner.Attach(display);
                 planner.Attach(new AutoRaportUpdater());
 

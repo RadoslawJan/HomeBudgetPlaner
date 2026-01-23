@@ -17,17 +17,20 @@ namespace HomeBudgetProject.Classes
             logger = Logger.GetInstance();
         }
 
-        public void AddExpense(Expense item)
-        {
-            if (user.Status == StatusLevel.Guest)
-            {
-                Console.WriteLine("Błąd: Gość nie ma uprawnień do dodawania wydatków.");
-                logger.Log(LogType.FailedOperation, user, "Próba dodania wydatku przez gościa");
-                return;
-            }
-            _realService.AddExpense(item);
-            logger.Log(LogType.SuccessfulOperation, user, $"Dodano wydatek: {item.Name}");
-        }
+public void AddExpense(Expense item)
+{
+    _realService.AddExpense(item);
+
+    if (user.Status == StatusLevel.Guest)
+    {
+        logger.Log(LogType.SuccessfulOperation, user, $"[DEMO] Dodano wydatek: {item.Name}");
+    }
+    else
+    {
+        logger.Log(LogType.SuccessfulOperation, user, $"Dodano wydatek: {item.Name}");
+    }
+}
+
 
         public void AddIncome(Income item)
         {
@@ -40,6 +43,30 @@ namespace HomeBudgetProject.Classes
             _realService.AddGroup(group);
             logger.Log(LogType.SuccessfulOperation, user, $"Dodano nową grupę");
         }
+
+        public bool RemoveItem(BudgetItem item)
+{
+    if (user.Status == StatusLevel.Guest)
+    {
+        Console.WriteLine("Gość nie może usuwać elementów.");
+        logger.Log(LogType.FailedOperation, user, "Próba usunięcia elementu przez gościa");
+        return false;
+    }
+
+    bool result = _realService.RemoveItem(item);
+
+    if (result)
+    {
+        logger.Log(LogType.SuccessfulOperation, user, $"Usunięto element: {item.Name}");
+    }
+    else
+    {
+        logger.Log(LogType.FailedOperation, user, $"Nie udało się usunąć elementu: {item.Name}");
+    }
+
+    return result;
+}
+
 
         public float GetTotalIncome()
         {

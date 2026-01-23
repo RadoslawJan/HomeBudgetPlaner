@@ -12,6 +12,8 @@ namespace HomeBudgetProject.Interfaces
         void AddIncome(Income item);
         void AddExpense(Expense item);
         void AddGroup(BudgetGroup group);
+        bool RemoveItem(BudgetItem item);
+
         List<BudgetItem> GetBudgetItems();
         void GenerateRaport();
         void SetStrategy(IRaportStrategy strategy);

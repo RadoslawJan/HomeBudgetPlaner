@@ -7,14 +7,16 @@ namespace HomeBudgetProject.Classes
 {
     public class HomeBudgetPlanner : IHomeBudgetPlanner
     {
-        private string filePath = "budget.json";
+        private readonly string filePath;
         private List<IBudgetObserver> observers = new List<IBudgetObserver>();
         public List<BudgetItem> budgetItemsList = new List<BudgetItem>();
         public IRaportStrategy raportStrategy;
-        public HomeBudgetPlanner()
-        {
-            LoadBudget();
-        }
+public HomeBudgetPlanner(string nickname)
+{
+    filePath = $"budget_{nickname}.json";
+    LoadBudget();
+}
+
         public void AddExpense(Expense item)
         {
             budgetItemsList.Add(item);
@@ -60,6 +62,20 @@ namespace HomeBudgetProject.Classes
             Notify();
             SaveBudget();
         }
+        public bool RemoveItem(BudgetItem item)
+{
+    bool removed = budgetItemsList.Remove(item);
+
+    if (removed)
+    {
+        Notify();
+        SaveBudget();
+    }
+
+    return removed;
+}
+
+
 
         //metoda potrzebna żeby łączyć podkategorie
         private void MergeSubGroups(BudgetGroup existingGroup, BudgetGroup newGroup)
@@ -117,20 +133,21 @@ namespace HomeBudgetProject.Classes
             return total;
         }
 
-        public float GetTotalExpense()
+public float GetTotalExpense()
+{
+    float total = 0;
+
+    foreach (var item in budgetItemsList)
+    {
+        if (item is Expense)
         {
-            float total = 0;
-
-            foreach (var item in budgetItemsList)
-            {
-                if (!(item is Expense))
-                {
-                    total += item.GetValue();
-                }
-            }
-
-            return total;
+            total += item.GetValue();
         }
+    }
+
+    return total;
+}
+
 
         public float GetBalance()
         {

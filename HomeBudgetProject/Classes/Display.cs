@@ -154,6 +154,8 @@ namespace HomeBudgetProject.Classes
                     new MenuOption("Dodaj Wydatek", () => AddExpenseMenu(proxy)),
                     new MenuOption("Dodaj Przychód", () => AddIncomeMenu(proxy)),
                     new MenuOption("Dodaj grupę budzetową", () => AddGroupMenu(proxy)),
+                    new MenuOption("Pokaż budżet", () => ShowPlan(proxy)),
+                    new MenuOption("Usuń element", () => RemoveItemMenu(proxy)),
                     new MenuOption("Zapisz raport do pliku", () => GenerateReportMenu(proxy)),
                     new MenuOption("Wyloguj", () => {running = false;})
                 });
@@ -277,6 +279,54 @@ namespace HomeBudgetProject.Classes
                 return;
             }
         }
+
+private void RemoveItemMenu(HomeBudgetPlannerProxy proxy)
+{
+    Console.Clear();
+    Console.WriteLine("[USUWANIE ELEMENTU]\n");
+
+    var items = proxy.GetBudgetItems();
+
+    if (items.Count == 0)
+    {
+        Console.WriteLine("Brak elementów do usunięcia.");
+        Console.ReadKey();
+        return;
+    }
+
+    for (int i = 0; i < items.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {items[i]}");
+    }
+
+    Console.Write("\nWybierz numer elementu do usunięcia: ");
+    if (!int.TryParse(Console.ReadLine(), out int choice) ||
+        choice < 1 || choice > items.Count)
+    {
+        Console.WriteLine("Nieprawidłowy wybór.");
+        Console.ReadKey();
+        return;
+    }
+
+    var item = items[choice - 1];
+
+    bool success = proxy.RemoveItem(item);
+
+    if (success)
+    {
+        Console.WriteLine("Element usunięty.");
+    }
+    else
+    {
+        Console.WriteLine("Operacja nie powiodła się.");
+    }
+
+    Console.ReadKey();
+}
+
+
+
+        
 
         // MENU BUDŻETU
         public void ShowPlan(HomeBudgetPlannerProxy proxy)
