@@ -31,31 +31,43 @@ namespace HomeBudgetProject.Classes
             return total;
         }
 
-        public float GetIncome()
-        {
-            float income = 0;
-            foreach (BudgetItem item in budgetItemList)
-            {
-                if (item is Income)
-                {
-                    income += item.GetValue();
-                }
-            }
-            return income;
-        }
+public float GetIncome()
+{
+    float income = 0;
 
-        public float GetExpense()
+    foreach (BudgetItem item in budgetItemList)
+    {
+        if (item is Income)
         {
-            float expense = 0;
-            foreach (BudgetItem item in budgetItemList)
-            {
-                if (item is Expense)
-                {
-                    expense += item.GetValue();
-                }
-            }
-            return expense;
+            income += item.GetValue();
         }
+        else if (item is BudgetGroup group)
+        {
+            income += group.GetIncome(); // REKURENCJA
+        }
+    }
+
+    return income;
+}
+
+public float GetExpense()
+{
+    float expense = 0;
+
+    foreach (BudgetItem item in budgetItemList)
+    {
+        if (item is Expense)
+        {
+            expense += item.GetValue();
+        }
+        else if (item is BudgetGroup group)
+        {
+            expense += group.GetExpense(); // REKURENCJA
+        }
+    }
+
+    return expense;
+}
 
 
         public override string ToString()

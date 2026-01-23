@@ -48,36 +48,43 @@ namespace HomeBudgetProject.Classes
             SaveBudget();
         }
 
+public float GetTotalIncome()
+{
+    float total = 0;
 
-        public float GetTotalIncome()
+    foreach (var item in budgetItemsList)
+    {
+        if (item is Income)
         {
-            float total = 0;
-            foreach (var item in budgetItemsList)
-            {
-                if (item is not Expense)
-                {
-                    total += item.GetValue();
-                }
-            }
-
-            return total;
+            total += item.GetValue();
         }
-
-        public float GetTotalExpense()
+        else if (item is BudgetGroup group)
         {
-            float total = 0;
-
-            foreach (var item in budgetItemsList)
-            {
-                if (item is not Income)
-                {
-                    total += item.GetValue();
-                }
-            }
-
-            return total;
+            total += group.GetIncome(); // 🔥
         }
+    }
 
+    return total;
+}
+
+public float GetTotalExpense()
+{
+    float total = 0;
+
+    foreach (var item in budgetItemsList)
+    {
+        if (item is Expense)
+        {
+            total += item.GetValue();
+        }
+        else if (item is BudgetGroup group)
+        {
+            total += group.GetExpense(); // 🔥
+        }
+    }
+
+    return total;
+}
 
         public float GetBalance()
         {
