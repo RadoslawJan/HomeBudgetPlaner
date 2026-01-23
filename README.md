@@ -148,7 +148,7 @@ Po uruchomieniu programu wyświetli się menu główne:
     - Możliwość rejestracji nowych kont
     - Wyjście z programu
 - Domyślny login i hasło dla administratora: **login:** `admin` **hasło:** `admin`
-- Nadanie roli VIP/Admin wymaga hasła aktualnego administratora
+- Nadanie roli Admin wymaga hasła aktualnego administratora
 
 ### Zarządzanie budżetem
 
