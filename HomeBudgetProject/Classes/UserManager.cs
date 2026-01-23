@@ -1,44 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using HomeBudgetProject.Enums;
-
 
 namespace HomeBudgetProject.Classes
 {
     public class UserManager
     {
         private const string FilePath = "users.json";
-        private List<User> users;
-        public User currentUser;
+        private readonly List<User> _users;
 
         public UserManager()
         {
-            users = LoadUsers();
-
-            bool adminFound = false;
-            foreach (User u in users)
-            {
-                if (u.Nickname == "admin")
-                {
-                    adminFound = true;
-                    break;
-                }
-            }
-
-            if (adminFound == false)
-            {
-                users.Add(new User("admin", HashPaswd("admin"), StatusLevel.Admin));
-                SaveUsers();
-            }
+            _users = LoadUsers();
+            EnsureDefaultAdminExists();
         }
+
 
         private List<User> LoadUsers()
         {
-            if (File.Exists(FilePath) == false)
+            if (!File.Exists(FilePath))
             {
                 return new List<User>();
             }
@@ -46,108 +31,80 @@ namespace HomeBudgetProject.Classes
             try
             {
                 string json = File.ReadAllText(FilePath, Encoding.UTF8);
-                List<User> list = JsonSerializer.Deserialize<List<User>>(json);
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var list = JsonSerializer.Deserialize<List<User>>(json, options);
 
-                if (list == null)
-                {
-                    return new List<User>();
-                }
-
-                return list;
+                return list!;
             }
             catch
             {
+                Console.WriteLine("Błąd");
                 return new List<User>();
             }
         }
 
         private void SaveUsers()
         {
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            options.WriteIndented = true; //formatowanie w przystępny sposób
-
-            string json = JsonSerializer.Serialize(users, options);
-            File.WriteAllText(FilePath, json, System.Text.Encoding.UTF8);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(_users, options);
+            File.WriteAllText(FilePath, json, Encoding.UTF8);
         }
 
-        public User Authenticate(string nickname, string password)
+        private void EnsureDefaultAdminExists()
+        {
+            if (!_users.Any(u => u.Nickname == "admin"))
+            {
+                _users.Add(new User("admin", HashPaswd("admin"), StatusLevel.Admin));
+                SaveUsers();
+            }
+        }
+
+
+        public User? Authenticate(string nickname, string password)
         {
             string hashedPassword = HashPaswd(password);
 
-            foreach (User u in users)
-            {
-                if (u.Nickname == nickname && u.Password == hashedPassword)
-                {
-                    return u;
-                }
-            }
-            return null;
+            return _users.FirstOrDefault(u => u.Nickname == nickname && u.Password == hashedPassword);
         }
 
-        public bool RegisterUser(string nickname, string password, StatusLevel level, string adminAuthPassword = null)
+        public bool RegisterUser(string nickname, string password, StatusLevel level, string? adminAuthPassword = null)
         {
-            string hashedAdminAuthPassword;
-            if (adminAuthPassword == null)
-            {
-                hashedAdminAuthPassword = adminAuthPassword;
-            }
-            else { hashedAdminAuthPassword = HashPaswd(adminAuthPassword); }
-
-            bool exists = false;
-            foreach (User u in users)
-            {
-                if (u.Nickname == nickname)
-                {
-                    exists = true;
-                    break;
-                }
-            }
-
-            if (exists == true)
+            if (_users.Any(u => u.Nickname == nickname))
             {
                 return false;
             }
 
-            if (level == StatusLevel.VIP || level == StatusLevel.Admin)
+            if (level >= StatusLevel.VIP)
             {
-                User admin = null;
-                foreach (User u in users)
-                {
-                    if (u.Status == StatusLevel.Admin)
-                    {
-                        admin = u;
-                        break;
-                    }
-                }
-
-                if (admin == null || admin.Password != hashedAdminAuthPassword)
+                if (string.IsNullOrEmpty(adminAuthPassword))
                 {
                     return false;
                 }
+
+                string hashedAdminAuth = HashPaswd(adminAuthPassword);
+
+                bool isAdminAuthorized = _users.Any(u => u.Status == StatusLevel.Admin && u.Password == hashedAdminAuth);
+
+                if (!isAdminAuthorized)
+                {
+                    return false; 
+                }
             }
 
-            users.Add(new User(nickname, HashPaswd(password), level));
+            _users.Add(new User(nickname, HashPaswd(password), level));
             SaveUsers();
+            
             return true;
         }
 
-        private string HashPaswd(string password) 
+
+        private string HashPaswd(string password)
         {
-            using (System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
+            using (var sha256 = SHA256.Create())
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(password);
                 byte[] hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
-            }
-        }
-
-        public void AddUser(string name, string pass, StatusLevel status)
-        {
-            currentUser = new User(name, pass, status);
-            if (currentUser.Status != StatusLevel.Guest)
-            {
-                users.Add(currentUser);
-                SaveUsers();
             }
         }
     }

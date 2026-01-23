@@ -4,11 +4,13 @@ namespace HomeBudgetProject.Classes
 {
     internal class AutoRaportUpdater : IBudgetObserver
     {
-        public void Update(HomeBudgetPlanner planer)
+        public void Update(HomeBudgetPlanner planner)
         {
-            Console.WriteLine("System: Wykryto zmiany, aktualizuję raport automatyczny...");
-            var autoStrategy = new CSVRaportStrategy();
-            autoStrategy.GenerateRaport(planer);
+            if (planner.is_raport_generated == true)
+            {
+                var autoStrategy = new CSVRaportStrategy();
+                autoStrategy.GenerateRaport(planner);
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace HomeBudgetProject.Classes
 
         public override string ToString()
         {
-            return $"{Name}  {Value}\n";
+            return $"{Name} {Value}zł\n";
         }
     }
 }

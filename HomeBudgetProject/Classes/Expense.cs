@@ -9,7 +9,7 @@ namespace HomeBudgetProject.Classes
         }
         public override string ToString()
         {
-            return $"{Name} - {Value} z³  [{Date:dd-MM-yyyy}]";
+            return base.ToString();
         }
 
     }

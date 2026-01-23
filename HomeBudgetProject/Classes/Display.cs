@@ -75,14 +75,14 @@ namespace HomeBudgetProject.Classes
             string login = "";
             while (login.Length < 3)
             {
-                Console.Write("Nowa nazwa (min 3 znaki): ");
+                Console.Write("Nowa nazwa (min. 3 znaki): ");
                 login = Console.ReadLine() ?? "";
             }
 
             string password = "";
             while (password.Length < 6)
             {
-                Console.Write("Nowe hasło (min 6 znaków): ");
+                Console.Write("Nowe hasło (min. 6 znaków): ");
                 password = Console.ReadLine() ?? "";
             }
 
@@ -156,7 +156,8 @@ namespace HomeBudgetProject.Classes
                     new MenuOption("Dodaj grupę budzetową", () => AddGroupMenu(proxy)),
                     new MenuOption("Pokaż budżet", () => ShowPlan(proxy)),
                     new MenuOption("Usuń element", () => RemoveItemMenu(proxy)),
-                    new MenuOption("Zapisz raport do pliku", () => GenerateReportMenu(proxy)),
+                    new MenuOption("Zapisz raport do pliku", () => proxy.GenerateRaport()),
+                    new MenuOption("Zmień strategię zapisu", () => ChangeStrategyMenu(proxy)),
                     new MenuOption("Wyloguj", () => {running = false;})
                 });
             }
@@ -177,6 +178,7 @@ namespace HomeBudgetProject.Classes
             if(int.TryParse(text, out int value))
             {
                 proxy.AddExpense(new Expense(name, value));
+                Update(proxy.GetRealService());
                 Console.WriteLine("Dodano wydatek");
             }
             else
@@ -234,7 +236,7 @@ namespace HomeBudgetProject.Classes
                     new MenuOption("Dodaj Wydatek", () => AddExpenseToGroup(group)),
                     new MenuOption("Dodaj Przychód", () => AddIncomeToGroup(group)),
                     new MenuOption("Dodaj Podgrupę", () => AddGroupMenu(proxy)),
-                    new MenuOption("Zakończ", () => running = false)
+                    new MenuOption("Zakończ", () => {proxy.AddGroup(group); running = false;})
                 });
             }
         }
@@ -280,49 +282,43 @@ namespace HomeBudgetProject.Classes
             }
         }
 
-private void RemoveItemMenu(HomeBudgetPlannerProxy proxy)
-{
-    Console.Clear();
-    Console.WriteLine("[USUWANIE ELEMENTU]\n");
+        // USUWANIE ELEMNTU
+        private void RemoveItemMenu(HomeBudgetPlannerProxy proxy)
+        {
+            Console.Clear();
+            Console.WriteLine("[USUWANIE ELEMENTU]\n");
 
-    var items = proxy.GetBudgetItems();
+            var items = proxy.GetBudgetItems();
 
-    if (items.Count == 0)
-    {
-        Console.WriteLine("Brak elementów do usunięcia.");
-        Console.ReadKey();
-        return;
-    }
+            if (items.Count == 0)
+            {
+                Console.WriteLine("Brak elementów do usunięcia.");
+                Console.ReadKey();
+                return;
+            }
 
-    for (int i = 0; i < items.Count; i++)
-    {
-        Console.WriteLine($"{i + 1}. {items[i]}");
-    }
+            for (int i = 0; i < items.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {items[i]}");
+            }
 
-    Console.Write("\nWybierz numer elementu do usunięcia: ");
-    if (!int.TryParse(Console.ReadLine(), out int choice) ||
-        choice < 1 || choice > items.Count)
-    {
-        Console.WriteLine("Nieprawidłowy wybór.");
-        Console.ReadKey();
-        return;
-    }
+            Console.Write("\nWybierz numer elementu do usunięcia: ");
+            if (!int.TryParse(Console.ReadLine(), out int choice) ||
+                choice < 1 || choice > items.Count)
+            {
+                Console.WriteLine("Nieprawidłowy wybór.");
+                Console.ReadKey();
+                return;
+            }
 
-    var item = items[choice - 1];
+            var item = items[choice - 1];
+            proxy.RemoveItem(item);
+            Console.WriteLine("Element usunięty.");
 
-    bool success = proxy.RemoveItem(item);
 
-    if (success)
-    {
-        Console.WriteLine("Element usunięty.");
-    }
-    else
-    {
-        Console.WriteLine("Operacja nie powiodła się.");
-    }
 
-    Console.ReadKey();
-}
+            Console.ReadKey();
+        }
 
 
 
@@ -339,6 +335,13 @@ private void RemoveItemMenu(HomeBudgetPlannerProxy proxy)
                 float balance = proxy.GetBalance();
 
                 Console.WriteLine($"\t\tObecny balans: {balance} zł\n");
+
+                List<BudgetItem> list = proxy.GetBudgetItems();
+
+                foreach(var item in list)
+                {
+                    Console.WriteLine(item);
+                }
 
                 ShowMenu(new List<MenuOption>
             {
@@ -403,25 +406,23 @@ private void RemoveItemMenu(HomeBudgetPlannerProxy proxy)
 
 
         // WYBÓR FORMATU PLIKU
-        private void GenerateReportMenu(HomeBudgetPlannerProxy proxy)
+        private void ChangeStrategyMenu(HomeBudgetPlannerProxy proxy)
         {
             Console.Clear();
             Console.WriteLine("\t\tAPLIKACJA BUDŻETU DOMOWEGO\n");
-            Console.WriteLine("[GENEROWANIE RAPORTU DO PLIKU]\n");
+            Console.WriteLine("[ZMIANA STRATEGII ZAPISU]\n");
             Console.WriteLine("Wybierz format pliku:");
             ShowMenu(new List<MenuOption>
             {
-                new MenuOption("Zapisz jako .PDF", () =>
+                new MenuOption("Zapisuj jako .PDF", () =>
                 {
                     proxy.SetStrategy(new PDFRaportStrategy());
-                    proxy.GenerateRaport();
                     Console.WriteLine("\nNaciśnij dowolny klawisz.");
                     Console.ReadKey();
                 }),
-                new MenuOption("Zapisz jako .CSV", () =>
+                new MenuOption("Zapisuj jako .CSV", () =>
                 {
                     proxy.SetStrategy(new CSVRaportStrategy());
-                    proxy.GenerateRaport();
                     Console.WriteLine("\nNaciśnij dowolny klawisz.");
                     Console.ReadKey();
                 }),
