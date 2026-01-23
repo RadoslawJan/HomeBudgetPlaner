@@ -135,7 +135,7 @@ Możliwość zmiany miejsca zapisu logów na przykład z pliku JSON na bazę dan
 | Radosław Janczura | Stworzenie repozytorim, stworzenie szkieletu na podstawie diagramu UML, serializacja do plików JSON, zabiezpieczenie haseł hashowaniem , stworzenie dokumentacji, pomoc przy debugowaniu, pomoc przy implementacji wzorców projektowych, zapewnieniu spójności danych pomiędzy sesjami oraz optymalizacji logiki aplikacji.  |
 | Bartosz Orłowski | Stworzenie klasy Display i obsługa menu w konsoli, napisanie logiki dodawania wydatków i przychodów w poprawny sposób, dodanie walidacji, czy użytkownik wpisuje poprawne kwoty. |
 | Piotr Burzyński | Implementacja wzorca Strategia, pozwalającego na wybór formatu raportu , stworzenie modułu Obserwatora do reagowania na zmiany w budżecie oraz wykorzystanie biblioteki QuestPDF do generowania plików PDF. |
-| Damian Filimoniuk | Kompozyt, Obserwator, JSON (serializacja polimorficzna), QuestPDF |
+| Damian Filimoniuk | Implementacja wzorców Singleton, odpowiadającego w projekcie za klasę Loggera oraz wzorca Proxy kontrolującego dostęp, finalne poprawki kodu, dodanie wzorca Composite, możliwość dodawania grup budżetowych. |
 ---
 ---
 ## 5. Instrukcja Użytkownika
