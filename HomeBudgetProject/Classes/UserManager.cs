@@ -74,7 +74,7 @@ namespace HomeBudgetProject.Classes
                 return false;
             }
 
-            if (level >= StatusLevel.VIP)
+            if (level == StatusLevel.Admin)
             {
                 if (string.IsNullOrEmpty(adminAuthPassword))
                 {
